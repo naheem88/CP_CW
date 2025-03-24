@@ -2,18 +2,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class CoffeeShop {
-
-    private Queue<String> orderQueue; // Shared Variable
-    private final int CAPACITY;
+    private final Queue<String> orderQueue;
+    private final int capacity;
 
     public CoffeeShop(int capacity) {
-        this.CAPACITY = capacity;
+        this.capacity = capacity;
         this.orderQueue = new LinkedList<>();
     }
 
     // Customers use this
     public synchronized void placeOrder(String order) {
-        while (orderQueue.size() == CAPACITY) {
+        while (orderQueue.size() == capacity) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -36,8 +35,7 @@ public class CoffeeShop {
             }
         }
 
-        orderQueue.poll();
-        String order = Thread.currentThread().getName();
+        String order = orderQueue.poll();
         notifyAll();
         return order;
     }
